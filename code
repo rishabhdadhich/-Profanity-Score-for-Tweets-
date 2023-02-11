@@ -1,0 +1,24 @@
+import re
+
+def calculate_profanity_score(tweet, slurs):
+    profanity_score = 0
+    words = re.findall(r'\b\w+\b', tweet)
+    for word in words:
+        if word in slurs:
+            profanity_score += 1
+    return profanity_score
+
+def process_tweets(tweets_file, slurs):
+    tweets = []
+    with open(tweets_file, 'r') as f:
+        for line in f:
+            tweet = line.strip()
+            profanity_score = calculate_profanity_score(tweet, slurs)
+            tweets.append((tweet, profanity_score))
+    return tweets
+
+if __name__ == '__main__':
+    slurs = ['nigger', 'fag', 'slut']
+    tweets = process_tweets('tweets.txt', slurs)
+    for tweet in tweets:
+        print('Tweet: {}, Profanity Score: {}'.format(tweet[0], tweet[1]))
